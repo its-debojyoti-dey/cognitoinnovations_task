@@ -1,75 +1,81 @@
-import { User, CreateUserDto, UpdateUserDto, UserResponse } from './user.types';
-import { AppError } from '../../common/middleware/errorHandler.middleware';
-import { HTTP_STATUS } from '../../common/constants/index.constants';
-
-// Mock data store (replace with actual database in production)
-let users: User[] = [];
-let idCounter = 1;
+import { CreateUserDto, UpdateUserDto, UserResponse } from "./user.types";
+import { AppError } from "../../common/middleware/errorHandler.middleware";
+import { HTTP_STATUS } from "../../common/constants/index.constants";
+import { UserModel } from "../../models";
 
 export class UserService {
   async createUser(data: CreateUserDto): Promise<UserResponse> {
-    // Check if user already exists
-    const existingUser = users.find((u) => u.email === data.email);
+    const existingUser = await UserModel.findOne({
+      where: { email: data.email },
+    });
     if (existingUser) {
-      throw new AppError('User with this email already exists', HTTP_STATUS.CONFLICT);
+      throw new AppError(
+        "User with this email already exists",
+        HTTP_STATUS.CONFLICT
+      );
     }
 
-    const newUser: User = {
-      id: `user_${idCounter++}`,
+    if (!data.password) {
+      throw new AppError("Password is required", HTTP_STATUS.BAD_REQUEST);
+    }
+
+    const user = await UserModel.create({
       email: data.email,
       name: data.name,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      password: data.password,
+    });
 
-    users.push(newUser);
-    return this.mapToResponse(newUser);
+    return this.mapToResponse(user);
   }
 
   async getUserById(id: string): Promise<UserResponse> {
-    const user = users.find((u) => u.id === id);
+    const user = await UserModel.findByPk(id);
     if (!user) {
-      throw new AppError('User not found', HTTP_STATUS.NOT_FOUND);
+      throw new AppError("User not found", HTTP_STATUS.NOT_FOUND);
     }
     return this.mapToResponse(user);
   }
 
   async getAllUsers(): Promise<UserResponse[]> {
+    const users = await UserModel.findAll();
     return users.map((user) => this.mapToResponse(user));
   }
 
   async updateUser(id: string, data: UpdateUserDto): Promise<UserResponse> {
-    const userIndex = users.findIndex((u) => u.id === id);
-    if (userIndex === -1) {
-      throw new AppError('User not found', HTTP_STATUS.NOT_FOUND);
+    const user = await UserModel.findByPk(id);
+    if (!user) {
+      throw new AppError("User not found", HTTP_STATUS.NOT_FOUND);
     }
 
-    // Check email uniqueness if email is being updated
-    if (data.email && data.email !== users[userIndex].email) {
-      const existingUser = users.find((u) => u.email === data.email);
+    if (data.email && data.email !== user.email) {
+      const existingUser = await UserModel.findOne({
+        where: { email: data.email },
+      });
       if (existingUser) {
-        throw new AppError('User with this email already exists', HTTP_STATUS.CONFLICT);
+        throw new AppError(
+          "User with this email already exists",
+          HTTP_STATUS.CONFLICT
+        );
       }
     }
 
-    users[userIndex] = {
-      ...users[userIndex],
-      ...data,
-      updatedAt: new Date(),
-    };
+    await user.update({
+      email: data.email ?? user.email,
+      name: data.name ?? user.name,
+    });
 
-    return this.mapToResponse(users[userIndex]);
+    return this.mapToResponse(user);
   }
 
   async deleteUser(id: string): Promise<void> {
-    const userIndex = users.findIndex((u) => u.id === id);
-    if (userIndex === -1) {
-      throw new AppError('User not found', HTTP_STATUS.NOT_FOUND);
+    const user = await UserModel.findByPk(id);
+    if (!user) {
+      throw new AppError("User not found", HTTP_STATUS.NOT_FOUND);
     }
-    users.splice(userIndex, 1);
+    await user.destroy();
   }
 
-  private mapToResponse(user: User): UserResponse {
+  private mapToResponse(user: UserModel): UserResponse {
     return {
       id: user.id,
       email: user.email,
@@ -81,4 +87,3 @@ export class UserService {
 }
 
 export const userService = new UserService();
-
