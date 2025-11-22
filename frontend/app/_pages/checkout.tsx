@@ -37,8 +37,8 @@ export default function CheckoutPageComponent() {
   ];
 
   const deliveryMethods = [
-    { id: "free", label: "Free Shipping - Rate - $0.00" },
-    { id: "flat", label: "Flat Rate - Rate - $5.00" },
+    { id: "free", label: "Free Shipping", rate: 0 },
+    { id: "flat", label: "Flat Rate", rate: 5 },
   ];
 
   const paymentMethods = [
@@ -48,38 +48,30 @@ export default function CheckoutPageComponent() {
   ];
 
   const paymentGateways = [
-    { id: "visa", name: "Visa", logo: "/visa-logo.jpg" },
-    { id: "mastercard", name: "Mastercard", logo: "/mastercard-logo.jpg" },
-    { id: "paypal", name: "PayPal", logo: "/paypal-logo.png" },
-    { id: "skrill", name: "Skrill", logo: "/skrill-logo.jpg" },
-    { id: "union", name: "Union", logo: "/union-pay-logo.jpg" },
-    { id: "electron", name: "Electron", logo: "/visa-electron-logo.jpg" },
+    { id: "visa", name: "Visa", logo: "./payment_method/visa.png" },
+    {
+      id: "mastercard",
+      name: "Mastercard",
+      logo: "./payment_method/002-round.png",
+    },
+    { id: "paypal", name: "PayPal", logo: "./payment_method/003-paypal.png" },
+    { id: "skrill", name: "Skrill", logo: "./payment_method/004-skrill.png" },
+    // { id: "union", name: "Union", logo: "./payment_method/004-union.png" },
+    // { id: "electron", name: "Electron", logo: "./payment_method/005-electron.png" },
   ];
 
   return (
-    <main className="min-h-screen max-w-7xl mx-auto py-8 px-4">
-      <div className="flex gap-4">
-        <div className="max-w-[30%] mx-auto space-y-4">
+    <main className="min-h-screen sm:max-w-7xl w-full mx-auto py-8 sm:px-4 px-2">
+      <div className="sm:flex grid sm:grid-cols-2 gap-4 ">
+        <div className="sm:max-w-[30%] w-full space-y-4">
           {/* Order Summary Card */}
           <Card>
             <SectionHeader title="Summary" />
-            <OrderSummary items={summaryItems} totalValue="$80.00" />
-          </Card>
-
-          {/* Products Card */}
-          <Card>
-            <div className="space-y-2">
-              {products.map((product) => (
-                <ProductItem
-                  key={product.title}
-                  image={product.image}
-                  title={product.title}
-                  rating={product.rating}
-                  price={product.price}
-                  originalPrice={product.originalPrice}
-                />
-              ))}
-            </div>
+            <OrderSummary
+              items={summaryItems}
+              totalValue="$80.00"
+              products={products}
+            />
           </Card>
 
           {/* Delivery Method Card */}
@@ -88,7 +80,7 @@ export default function CheckoutPageComponent() {
               title="Delivery Method"
               description="Please select the preferred shipping method to use on this order."
             />
-            <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
               {deliveryMethods.map((method) => (
                 <RadioButton
                   key={method.id}
@@ -96,6 +88,7 @@ export default function CheckoutPageComponent() {
                   name="delivery"
                   label={method.label}
                   checked={deliveryMethod === method.id}
+                  rate={method.rate}
                   onChange={(checked) =>
                     checked && setDeliveryMethod(method.id)
                   }
@@ -124,7 +117,7 @@ export default function CheckoutPageComponent() {
           </Card>
         </div>
 
-        <div className="max-w-[70%] w-full space-y-4">
+        <div className="sm:max-w-[70%] w-full space-y-4">
           <CheckoutForm />
         </div>
       </div>

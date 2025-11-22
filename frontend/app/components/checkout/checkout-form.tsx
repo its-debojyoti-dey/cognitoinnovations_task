@@ -178,8 +178,8 @@ export function CheckoutForm() {
       </FormSection>
 
       {/* Submit Button */}
-      <div className="flex justify-center pt-8">
-        <Button type="submit">Continue to Shipping</Button>
+      <div className="flex justify-end ">
+        <Button type="submit">Place Order</Button>
       </div>
     </form>
   );
