@@ -17,7 +17,7 @@ interface ShoppingSectionProps {
 
 export function ShoppingSection({ products }: ShoppingSectionProps) {
   return (
-    <section className="w-full py-16 px-4">
+    <section className="w-full py-16 lg:px-4 px-0">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -33,8 +33,8 @@ export function ShoppingSection({ products }: ShoppingSectionProps) {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard key={index} product={product} />
           ))}
         </div>
       </div>

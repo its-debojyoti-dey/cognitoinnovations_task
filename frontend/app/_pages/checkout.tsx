@@ -21,14 +21,14 @@ export default function CheckoutPageComponent() {
 
   const products = [
     {
-      image: "/dates-value-pack-pouch.jpg",
+      image: "/checkout/1.png",
       title: "Dates Value Pack Pouch",
       rating: 4.5,
       price: "$120.25",
       originalPrice: "$123.25",
     },
     {
-      image: "/smoked-honey-spiced-nuts.jpg",
+      image: "/checkout/2.png",
       title: "Smoked Honey Spiced Nuts",
       rating: 4.5,
       price: "$120.25",

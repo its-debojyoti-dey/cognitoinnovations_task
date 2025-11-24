@@ -17,11 +17,11 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="flex flex-col bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
       {/* Product Image Container */}
-      <div className="relative bg-gray-100 h-72 flex items-center justify-center group m-3 border border-gray-200 rounded-lg">
+      <div className="relative bg-[#f7f7fa] h-72 flex items-center justify-center group lg:m-3 rounded-lg">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.title}
-          className="h-full w-full object-contain p-4"
+          className="h-full w-full "
         />
         <div className="h-10 w-10 bg-gray-100 border border-gray-300 rounded-full absolute -bottom-5 left-[45%]"></div>
       </div>

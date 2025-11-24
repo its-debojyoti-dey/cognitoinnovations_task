@@ -24,72 +24,72 @@ const navItems = [
   },
   {
     label: "Category",
-    href: "/category",
+    href: "#",
     subItems: [
       {
         label: "Category 1",
-        href: "/category/1",
+        href: "#",
       },
       {
         label: "Category 2",
-        href: "/category/2",
+        href: "#",
       },
     ],
   },
   {
     label: "Products",
-    href: "/products",
+    href: "#",
     subItems: [
       {
         label: "Product 1",
-        href: "/product/1",
+        href: "#",
       },
       {
         label: "Product 2",
-        href: "/product/2",
+        href: "#",
       },
     ],
   },
 
   {
     label: "Pages",
-    href: "/pages",
+    href: "#",
     subItems: [
       {
         label: "Page 1",
-        href: "/page/1",
+        href: "#",
       },
       {
         label: "Page 2",
-        href: "/page/2",
+        href: "#",
       },
     ],
   },
   {
     label: "Blog",
-    href: "/blog",
+    href: "#",
     subItems: [
       {
         label: "Blog 1",
-        href: "/blog/1",
+        href: "#",
       },
       {
         label: "Blog 2",
-        href: "/blog/2",
+        href: "#",
       },
     ],
   },
   {
     label: "Elements",
-    href: "/elements",
+    href: "#",
     subItems: [
       {
         label: "Element 1",
-        href: "/element/1",
+        href: "#",
       },
       {
         label: "Element 2",
-        href: "/element/2",
+        href: "#",
       },
     ],
   },
@@ -98,17 +98,17 @@ const navItems = [
 const SubMenuItems = [
   {
     label: "Account",
-    href: "/account",
+    href: "/",
     icon: <User className="w-5 h-5" />,
   },
   {
     label: "Wishlist",
-    href: "/wishlist",
+    href: "/",
     icon: <Heart className="w-5 h-5" />,
   },
   {
     label: "Cart",
-    href: "/cart",
+    href: "/checkout",
     icon: <ShoppingCart className="w-5 h-5" />,
   },
 ];

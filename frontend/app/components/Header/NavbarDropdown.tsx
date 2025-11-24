@@ -1,28 +1,31 @@
-"use client"
+"use client";
 
-import { ChevronDown } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
+import { ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 interface DropdownItem {
-  label: string
-  href: string
+  label: string;
+  href: string;
 }
 
 interface NavbarDropdownProps {
-  label: string
-  items: DropdownItem[]
+  label: string;
+  items: DropdownItem[];
 }
 
 export const NavbarDropdown = ({ label, items }: NavbarDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!items || items.length === 0) {
     return (
-      <Link href="#" className="px-4 py-2 text-sm font-medium hover:text-gray-600 transition-colors">
+      <Link
+        href="#"
+        className="px-4 py-2 text-sm font-medium hover:text-gray-600 transition-colors"
+      >
         {label}
       </Link>
-    )
+    );
   }
 
   return (
@@ -32,7 +35,7 @@ export const NavbarDropdown = ({ label, items }: NavbarDropdownProps) => {
         <ChevronDown className="w-4 h-4" />
       </button>
 
-      <div className="absolute left-0 mt-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+      <div className="z-10 absolute left-0 mt-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
         {items.map((item) => (
           <Link
             key={item.label}
@@ -44,5 +47,5 @@ export const NavbarDropdown = ({ label, items }: NavbarDropdownProps) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

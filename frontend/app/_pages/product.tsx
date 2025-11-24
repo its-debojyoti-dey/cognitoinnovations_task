@@ -34,7 +34,7 @@ export default function ProductPage() {
       id: 1,
       title: "Best snakes with hazel nut mix pack 200gm",
       category: "Snacks",
-      image: "/chocolate-hazelnut-snacks.jpg",
+      image: "/product_page/1.png",
       originalPrice: 123.25,
       salePrice: 120.25,
     },
@@ -42,7 +42,7 @@ export default function ProductPage() {
       id: 2,
       title: "Sweet snakes crunchy nut mix 250gm pack",
       category: "Snacks",
-      image: "/crunchy-nut-mix-snacks.jpg",
+      image: "/product_page/2.png",
       originalPrice: 110.0,
       salePrice: 100.0,
     },
@@ -50,7 +50,7 @@ export default function ProductPage() {
       id: 3,
       title: "Best snakes with hazel nut mix pack 200gm",
       category: "Snacks",
-      image: "/fresh-lemons.png",
+      image: "/product_page/3.png",
       originalPrice: 123.25,
       salePrice: 120.25,
     },
@@ -58,23 +58,23 @@ export default function ProductPage() {
       id: 4,
       title: "Sweet snakes crunchy nut mix 250gm pack",
       category: "Snacks",
-      image: "/apple-juice-beverage.jpg",
+      image: "/product_page/4.png",
       originalPrice: 110.0,
       salePrice: 100.0,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-white 2xl:max-w-[70%] max-w-[90%] mx-auto">
+    <main className="min-h-screen bg-white 2xl:max-w-[70%] max-w-[95%] mx-auto">
       <div className="flex lg:py-12 py-6 flex-col lg:flex-row gap-6">
         <div className="h-full min-w-[100%] lg:min-w-[25%] mb-12 lg:mb-0 xl:block hidden">
           <ProductFilter />
         </div>
         {/* Product Section */}
         <div className="mx-auto lg:px-4 px-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 px-3">
             <ProductImage
-              src="/info/veg.png"
+              src="/product.png"
               alt="Seeds Of Change Organic Quinoa"
             />
 

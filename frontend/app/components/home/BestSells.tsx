@@ -10,7 +10,7 @@ const bestSellsData: Product[] = [
     id: "1",
     title: "Fresh organic villa farm lemon 500gm pack",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/sales/1.png",
     imageAlt: "Fresh organic villa farm lemon 500gm pack",
     rating: 4.0,
     brand: "NestFood",
@@ -24,7 +24,7 @@ const bestSellsData: Product[] = [
     id: "2",
     title: "Best snakes with hazel nut pack 200gm",
     category: "Hodo Foods",
-    image: "/info/veg.png",
+    image: "/sales/2.png",
     imageAlt: "Best snakes with hazel nut pack 200gm",
     rating: 3.5,
     brand: "Stouffer",
@@ -38,7 +38,7 @@ const bestSellsData: Product[] = [
     id: "3",
     title: "Organic fresh venila farm watermelon 5kg",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/sales/3.png",
     imageAlt: "Organic fresh venila farm watermelon 5kg",
     rating: 4.0,
     brand: "StarKist",
@@ -52,7 +52,7 @@ const bestSellsData: Product[] = [
     id: "4",
     title: "Fresh organic apple 1kg simla marmimg",
     category: "Vegetables",
-    image: "/info/veg.png",
+    image: "/sales/4.png",
     imageAlt: "Fresh organic apple 1kg simla marmimg",
     rating: 4.0,
     brand: "NestFood",
@@ -66,7 +66,7 @@ const bestSellsData: Product[] = [
     id: "5",
     title: "Blue Diamond Almonds Lightly Salted Vegetables",
     category: "Pet Foods",
-    image: "/info/veg.png",
+    image: "/sales/1.png",
     imageAlt: "Blue Diamond Almonds Lightly Salted Vegetables",
     rating: 4.0,
     brand: "NestFood",
@@ -80,7 +80,7 @@ const bestSellsData: Product[] = [
     id: "6",
     title: "Chobani Complete Vanilla Greek Yogurt",
     category: "Hodo Foods",
-    image: "/info/veg.png",
+    image: "/sales/2.png",
     imageAlt: "Chobani Complete Vanilla Greek Yogurt",
     rating: 4.0,
     brand: "NestFood",
@@ -94,7 +94,7 @@ const bestSellsData: Product[] = [
     id: "7",
     title: "Canada Dry Ginger Ale – 2 L Bottle – 200ml - 400g",
     category: "Meats",
-    image: "/info/veg.png",
+    image: "/sales/3.png",
     imageAlt: "Canada Dry Ginger Ale – 2 L Bottle – 200ml - 400g",
     rating: 4.0,
     brand: "NestFood",
@@ -108,7 +108,7 @@ const bestSellsData: Product[] = [
     id: "8",
     title: "Encore Seafoods Stuffed Alaskan Salmon",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/sales/4.png",
     imageAlt: "Encore Seafoods Stuffed Alaskan Salmon",
     rating: 4.0,
     brand: "NestFood",
@@ -122,7 +122,7 @@ const bestSellsData: Product[] = [
     id: "9",
     title: "Gorton’s Beer Battered Fish Fillets with soft paper",
     category: "Coffes",
-    image: "/info/veg.png",
+    image: "/sales/1.png",
     imageAlt: "Gorton’s Beer Battered Fish Fillets with soft paper",
     rating: 4.0,
     brand: "Old El Paso",
@@ -136,7 +136,7 @@ const bestSellsData: Product[] = [
     id: "10",
     title: "Haagen-Dazs Caramel Cone Ice Cream Ketchup",
     category: "Cream",
-    image: "/info/veg.png",
+    image: "/sales/2.png",
     imageAlt: "Haagen-Dazs Caramel Cone Ice Cream Ketchup",
     rating: 4.0,
     brand: "Tyson",
@@ -153,7 +153,7 @@ const BestSells = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const totalItems = isDesktop ? 4 : isTablet ? 3 : isMobile ? 2 : 1;
+  const totalItems = isDesktop ? 4 : isTablet ? 3 : isMobile ? 1 : 0;
   const isFirstItem = currentIndex === 0;
   const isLastItem = currentIndex === bestSellsData.length - totalItems;
 
@@ -192,62 +192,67 @@ const BestSells = () => {
   }, [currentIndex, totalItems, isFirstItem, isLastItem]);
 
   return (
-    <div className="max-w-[80%]  mx-auto my-10 flex flex-col md:flex-row gap-4">
-      <div className="bg-white rounded-lg min-w-[20%] p-4 flex flex-col items-center justify-center  relative overflow-hidden flex-1 lg:block hidden">
-        <img
-          src={"/sales/bg.png"}
-          alt="Bring nature into your home"
-          className="w-full h-full object-cover absolute top-0 left-0 "
-        />
-        <div className="absolute top-0 sm:left-10 left-5 w-60 h-full flex flex-col items-start justify-center  sm:gap-8 gap-4">
-          <h3 className="text-3xl font-bold text-white">
-            Bring nature into your home
-          </h3>
-          <button className="bg-[#F53E32] text-white px-4 py-2 text-xs font-bold rounded-md hover:bg-red-600 transition-all duration-300 hover:scale-105 cursor-pointer">
-            Shop Now
-          </button>
+    <div className=" sm:p-8 p-4 max-w-[80%] mx-auto">
+      <h3 className="text-3xl font-bold text-slate-900">Daily Best Sells</h3>
+      <div className="  mx-auto my-10 flex flex-col md:flex-row gap-4">
+        <div className="bg-white rounded-lg min-w-[20%] p-4 flex flex-col items-center justify-center  relative overflow-hidden flex-1 lg:block hidden">
+          <img
+            src={"/sales/bg.png"}
+            alt="Bring nature into your home"
+            className="w-full h-full object-cover absolute top-0 left-0 "
+          />
+          <div className="absolute top-0 sm:left-10 left-5 w-60 h-full flex flex-col items-start justify-center  sm:gap-8 gap-4">
+            <h3 className="text-3xl font-bold text-white">
+              Bring nature into your home
+            </h3>
+            <button className="bg-[#F53E32] text-white px-4 py-2 text-xs font-bold rounded-md hover:bg-red-600 transition-all duration-300 hover:scale-105 cursor-pointer">
+              Shop Now
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center justify-center gap-4 relative w-full h-full">
-        <button
-          className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handlePrevious}
-          disabled={isFirstItem}
-        >
-          <ArrowLeftIcon className="w-6 h-6" />
-        </button>
-        <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 w-full h-full overflow-x-scroll">
-          {bestSellsData
-            .slice(currentIndex, currentIndex + totalItems)
-            .map((product, index) => (
-              <ProductCard
-                key={index}
-                id={index.toString()}
-                title={product.title}
-                category={product.category}
-                image={product.image}
-                imageAlt={product.imageAlt}
-                rating={product.rating}
-                brand={product.brand}
-                salePrice={product.salePrice}
-                originalPrice={product.originalPrice}
-                isBadge={product.isBadge}
-                badgeText={product.badgeText}
-                badgeColor={product.badgeColor}
-                onAddClick={product.onAddClick}
-                pricingClass="flex-col items-start justify-start"
-                buttonClass="w-full text-center justify-center items-center"
-              />
-            ))}
+        <div className="flex flex-col items-center justify-center gap-4 relative w-full h-full">
+          <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 w-full h-full">
+            {bestSellsData
+              .slice(currentIndex, currentIndex + totalItems)
+              .map((product, index) => (
+                <ProductCard
+                  key={index}
+                  id={index.toString()}
+                  title={product.title}
+                  category={product.category}
+                  image={product.image}
+                  imageAlt={product.imageAlt}
+                  rating={product.rating}
+                  brand={product.brand}
+                  salePrice={product.salePrice}
+                  originalPrice={product.originalPrice}
+                  isBadge={product.isBadge}
+                  badgeText={product.badgeText}
+                  badgeColor={product.badgeColor}
+                  onAddClick={product.onAddClick}
+                  pricingClass="flex-col items-start justify-start"
+                  buttonClass="w-full text-center justify-center items-center"
+                />
+              ))}
+          </div>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <button
+              className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handlePrevious}
+              disabled={isFirstItem}
+            >
+              <ArrowLeftIcon className="w-6 h-6" />
+            </button>
+            <button
+              className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleNext}
+              disabled={isLastItem}
+            >
+              <ArrowRightIcon className="w-6 h-6" />
+            </button>
+          </div>
         </div>
-        <button
-          className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleNext}
-          disabled={isLastItem}
-        >
-          <ArrowRightIcon className="w-6 h-6" />
-        </button>
       </div>
     </div>
   );

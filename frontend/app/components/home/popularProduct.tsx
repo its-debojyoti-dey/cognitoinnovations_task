@@ -5,6 +5,7 @@ import { ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/app/utils/utils";
 import useResponsive from "@/app/hooks/useResponsive";
+import Link from "next/link";
 
 export const badgeColors = {
   Hot: "bg-[#F74B81]",
@@ -213,14 +214,17 @@ export function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-1 flex flex-col justify-between">
+      <div className="p-4 space-y-1 flex flex-col justify-between flex-1">
         {/* Category */}
         <p className="text-slate-400 text-sm font-medium">{category}</p>
 
         {/* Title */}
-        <h3 className="text-slate-900 font-semibold text-lg leading-snug">
+        <Link
+          href={`/product/1`}
+          className="text-slate-900 font-semibold text-lg leading-snug line-clamp-2"
+        >
           {title}
-        </h3>
+        </Link>
 
         {/* Rating */}
         <div className="flex items-center gap-2">
@@ -310,8 +314,7 @@ const popularProduct = () => {
               </button>
               {Array.from(
                 new Set(popularProductData.map((product) => product.category))
-              )
-              .map((item, index) => (
+              ).map((item, index) => (
                 <button
                   key={index}
                   onClick={() => handleCategoryChange(item)}
