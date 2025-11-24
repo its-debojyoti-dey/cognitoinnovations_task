@@ -23,7 +23,7 @@ const infoCardsData = [
 
 const infoCards = () => {
   return (
-    <div className="grid sm:grid-cols-3  grid-cols-1 gap-4 max-w-[80%] mx-auto my-10 ">
+    <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 lg:max-w-[80%] max-w-[90%] mx-auto my-10 ">
       {infoCardsData.map((card, index) => (
         <div
           key={index}

@@ -3,6 +3,8 @@ import React, { useState } from "react";
 
 import { ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
+import { cn } from "@/app/utils/utils";
+import useResponsive from "@/app/hooks/useResponsive";
 
 export const badgeColors = {
   Hot: "bg-[#F74B81]",
@@ -16,7 +18,7 @@ const popularProductData: Product[] = [
     id: "1",
     title: "Fresh organic villa farm lemon 500gm pack",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/popular_products/1.png",
     imageAlt: "Fresh organic villa farm lemon 500gm pack",
     rating: 4.0,
     brand: "NestFood",
@@ -30,7 +32,7 @@ const popularProductData: Product[] = [
     id: "2",
     title: "Best snakes with hazel nut pack 200gm",
     category: "Hodo Foods",
-    image: "/info/veg.png",
+    image: "/popular_products/2.png",
     imageAlt: "Best snakes with hazel nut pack 200gm",
     rating: 3.5,
     brand: "Stouffer",
@@ -44,7 +46,7 @@ const popularProductData: Product[] = [
     id: "3",
     title: "Organic fresh venila farm watermelon 5kg",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/popular_products/3.png",
     imageAlt: "Organic fresh venila farm watermelon 5kg",
     rating: 4.0,
     brand: "StarKist",
@@ -58,7 +60,7 @@ const popularProductData: Product[] = [
     id: "4",
     title: "Fresh organic apple 1kg simla marmimg",
     category: "Vegetables",
-    image: "/info/veg.png",
+    image: "/popular_products/4.png",
     imageAlt: "Fresh organic apple 1kg simla marmimg",
     rating: 4.0,
     brand: "NestFood",
@@ -72,7 +74,7 @@ const popularProductData: Product[] = [
     id: "5",
     title: "Blue Diamond Almonds Lightly Salted Vegetables",
     category: "Pet Foods",
-    image: "/info/veg.png",
+    image: "/popular_products/5.png",
     imageAlt: "Blue Diamond Almonds Lightly Salted Vegetables",
     rating: 4.0,
     brand: "NestFood",
@@ -86,7 +88,7 @@ const popularProductData: Product[] = [
     id: "6",
     title: "Chobani Complete Vanilla Greek Yogurt",
     category: "Hodo Foods",
-    image: "/info/veg.png",
+    image: "/popular_products/6.png",
     imageAlt: "Chobani Complete Vanilla Greek Yogurt",
     rating: 4.0,
     brand: "NestFood",
@@ -100,7 +102,7 @@ const popularProductData: Product[] = [
     id: "7",
     title: "Canada Dry Ginger Ale – 2 L Bottle – 200ml - 400g",
     category: "Meats",
-    image: "/info/veg.png",
+    image: "/popular_products/7.png",
     imageAlt: "Canada Dry Ginger Ale – 2 L Bottle – 200ml - 400g",
     rating: 4.0,
     brand: "NestFood",
@@ -114,7 +116,7 @@ const popularProductData: Product[] = [
     id: "8",
     title: "Encore Seafoods Stuffed Alaskan Salmon",
     category: "Snack",
-    image: "/info/veg.png",
+    image: "/popular_products/8.png",
     imageAlt: "Encore Seafoods Stuffed Alaskan Salmon",
     rating: 4.0,
     brand: "NestFood",
@@ -128,7 +130,7 @@ const popularProductData: Product[] = [
     id: "9",
     title: "Gorton’s Beer Battered Fish Fillets with soft paper",
     category: "Coffes",
-    image: "/info/veg.png",
+    image: "/popular_products/9.png",
     imageAlt: "Gorton’s Beer Battered Fish Fillets with soft paper",
     rating: 4.0,
     brand: "Old El Paso",
@@ -142,7 +144,7 @@ const popularProductData: Product[] = [
     id: "10",
     title: "Haagen-Dazs Caramel Cone Ice Cream Ketchup",
     category: "Cream",
-    image: "/info/veg.png",
+    image: "/popular_products/10.png",
     imageAlt: "Haagen-Dazs Caramel Cone Ice Cream Ketchup",
     rating: 4.0,
     brand: "Tyson",
@@ -167,6 +169,8 @@ export interface Product {
   isBadge?: boolean;
   badgeText?: string;
   badgeColor?: string;
+  pricingClass?: string;
+  buttonClass?: string;
   onAddClick?: () => void;
 }
 
@@ -183,6 +187,8 @@ export function ProductCard({
   badgeText = "Badge",
   badgeColor = badgeColors.Other,
   onAddClick,
+  pricingClass,
+  buttonClass,
 }: Product) {
   return (
     <div className="relative bg-white rounded-3xl overflow-hidden border border-slate-200">
@@ -200,14 +206,14 @@ export function ProductCard({
         <Image
           src={image || "/placeholder.svg"}
           alt={imageAlt}
-          width={280}
-          height={280}
+          width={200}
+          height={200}
           className="object-contain"
         />
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-1">
+      <div className="p-4 space-y-1 flex flex-col justify-between">
         {/* Category */}
         <p className="text-slate-400 text-sm font-medium">{category}</p>
 
@@ -231,7 +237,12 @@ export function ProductCard({
         </div>
 
         {/* Price and Button */}
-        <div className="flex items-center justify-between pt-4 flex-wrap lg:flex-nowrap gap-2">
+        <div
+          className={cn(
+            "flex items-center justify-between flex-wrap lg:flex-nowrap gap-2",
+            pricingClass
+          )}
+        >
           <div className="flex items-end gap-2">
             <span className="text-green-600 font-bold text-md opacity-80">
               ${salePrice.toFixed(2)}
@@ -242,7 +253,10 @@ export function ProductCard({
           </div>
           <button
             onClick={onAddClick}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors"
+            className={cn(
+              "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors",
+              buttonClass
+            )}
           >
             <ShoppingCart className="w-4 h-4" />
             Add
@@ -256,6 +270,18 @@ export function ProductCard({
 const popularProduct = () => {
   const [cart, setCart] = useState<string[]>([]);
 
+  const { isDesktop } = useResponsive();
+  const [category, setCategory] = useState<string>("all");
+
+  const handleCategoryChange = (category: string) => {
+    setCategory(category);
+  };
+
+  const filteredProducts = popularProductData.filter((product) => {
+    if (category === "all") return true;
+    return product.category === category;
+  });
+
   const handleAddToCart = (productId: string, productTitle: string) => {
     setCart([...cart, productId]);
     console.log(
@@ -264,15 +290,64 @@ const popularProduct = () => {
   };
 
   return (
-    <div className="min-h-screen sm:p-8 p-4 my-10">
-      <div className="mb-8 max-w-[80%] mx-auto">
+    <div className="sm:p-8 p-4 my-10">
+      <div className="mb-8 sm:max-w-[80%] max-w-[90%] mx-auto flex items-center justify-between flex-wrap gap-2">
         <h1 className="sm:text-3xl text-2xl font-bold text-slate-900 mb-2 ">
           Popular Products
         </h1>
+
+        <div className="flex items-center gap-2">
+          {isDesktop ? (
+            <>
+              <button
+                onClick={() => handleCategoryChange("all")}
+                className={cn(
+                  "text-gray-400 px-2 py-1 rounded-md cursor-pointer text-sm",
+                  category === "all" ? "text-black" : "text-gray-400"
+                )}
+              >
+                All
+              </button>
+              {Array.from(
+                new Set(popularProductData.map((product) => product.category))
+              )
+              .map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleCategoryChange(item)}
+                  className={cn(
+                    "text-gray-400 px-2 py-1 rounded-md cursor-pointer text-sm",
+                    category === item ? "text-black" : "text-gray-400"
+                  )}
+                >
+                  {item}
+                </button>
+              ))}
+            </>
+          ) : (
+            <>
+              {/* select category */}
+              <select
+                defaultValue="all"
+                className="text-gray-400 px-2 py-1 rounded-md cursor-pointer border border-gray-200"
+                onChange={(e) => handleCategoryChange(e.target.value)}
+              >
+                <option value="all">All</option>
+                {Array.from(
+                  new Set(popularProductData.map((product) => product.category))
+                ).map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 max-w-[80%] mx-auto">
-        {popularProductData?.map((product, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 lg:max-w-[80%] max-w-[90%] mx-auto">
+        {filteredProducts?.map((product, index) => (
           <ProductCard
             key={index}
             {...product}

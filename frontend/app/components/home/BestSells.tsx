@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
 import { badgeColors, Product } from "./popularProduct";
 import { ProductCard } from "./popularProduct";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import useResponsive from "@/app/hooks/useResponsive";
+import { useEffect, useState } from "react";
 
 const bestSellsData: Product[] = [
   {
@@ -146,16 +149,58 @@ const bestSellsData: Product[] = [
 ];
 
 const BestSells = () => {
+  const { isDesktop, isTablet, isMobile } = useResponsive();
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const totalItems = isDesktop ? 4 : isTablet ? 3 : isMobile ? 2 : 1;
+  const isFirstItem = currentIndex === 0;
+  const isLastItem = currentIndex === bestSellsData.length - totalItems;
+
+  const handlePrevious = () => {
+    if (isFirstItem) return;
+    setCurrentIndex(currentIndex - 1);
+  };
+  const handleNext = () => {
+    if (isLastItem) return;
+    setCurrentIndex(currentIndex + 1);
+  };
+
+  useEffect(() => {
+    if (currentIndex < 0) {
+      setCurrentIndex(bestSellsData.length - totalItems);
+    }
+    if (currentIndex >= bestSellsData.length - totalItems) {
+      setCurrentIndex(0);
+    }
+
+    const container = document.querySelector(".overflow-x-scroll");
+    if (container) {
+      container.scrollTo({
+        left: currentIndex * (container.clientWidth / totalItems),
+        behavior: "smooth",
+      });
+    }
+
+    if (currentIndex < 0) {
+      setCurrentIndex(0);
+    }
+    if (currentIndex >= bestSellsData.length - totalItems) {
+      setCurrentIndex(bestSellsData.length - totalItems);
+      return;
+    }
+  }, [currentIndex, totalItems, isFirstItem, isLastItem]);
+
   return (
-    <div className="max-w-[80%]  mx-auto my-10 flex flex-col md:flex-row gap-4 ">
-      <div className="bg-white rounded-lg p-4 flex flex-col items-center justify-center  relative max-w-[20%] min-h-70 overflow-hidden flex-1">
+    <div className="max-w-[80%]  mx-auto my-10 flex flex-col md:flex-row gap-4">
+      <div className="bg-white rounded-lg min-w-[20%] p-4 flex flex-col items-center justify-center  relative overflow-hidden flex-1 lg:block hidden">
         <img
-          src={bestSellsData[0].image}
-          alt={bestSellsData[0].title}
+          src={"/sales/bg.png"}
+          alt="Bring nature into your home"
           className="w-full h-full object-cover absolute top-0 left-0 "
         />
         <div className="absolute top-0 sm:left-10 left-5 w-60 h-full flex flex-col items-start justify-center  sm:gap-8 gap-4">
-          <h3 className="text-xl font-bold text-[#253D4E]">
+          <h3 className="text-3xl font-bold text-white">
             Bring nature into your home
           </h3>
           <button className="bg-[#F53E32] text-white px-4 py-2 text-xs font-bold rounded-md hover:bg-red-600 transition-all duration-300 hover:scale-105 cursor-pointer">
@@ -164,25 +209,45 @@ const BestSells = () => {
         </div>
       </div>
 
-      <div className="flex-1 grid md:grid-cols-4 grid-cols-1 gap-4">
-        {bestSellsData.slice(0, 4).map((product, index) => (
-          <ProductCard
-            key={index}
-            id={index.toString()}
-            title={product.title}
-            category={product.category}
-            image={product.image}
-            imageAlt={product.imageAlt}
-            rating={product.rating}
-            brand={product.brand}
-            salePrice={product.salePrice}
-            originalPrice={product.originalPrice}
-            isBadge={product.isBadge}
-            badgeText={product.badgeText}
-            badgeColor={product.badgeColor}
-            onAddClick={product.onAddClick}
-          />
-        ))}
+      <div className="flex items-center justify-center gap-4 relative w-full h-full">
+        <button
+          className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handlePrevious}
+          disabled={isFirstItem}
+        >
+          <ArrowLeftIcon className="w-6 h-6" />
+        </button>
+        <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 w-full h-full overflow-x-scroll">
+          {bestSellsData
+            .slice(currentIndex, currentIndex + totalItems)
+            .map((product, index) => (
+              <ProductCard
+                key={index}
+                id={index.toString()}
+                title={product.title}
+                category={product.category}
+                image={product.image}
+                imageAlt={product.imageAlt}
+                rating={product.rating}
+                brand={product.brand}
+                salePrice={product.salePrice}
+                originalPrice={product.originalPrice}
+                isBadge={product.isBadge}
+                badgeText={product.badgeText}
+                badgeColor={product.badgeColor}
+                onAddClick={product.onAddClick}
+                pricingClass="flex-col items-start justify-start"
+                buttonClass="w-full text-center justify-center items-center"
+              />
+            ))}
+        </div>
+        <button
+          className="rounded-full p-2 bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handleNext}
+          disabled={isLastItem}
+        >
+          <ArrowRightIcon className="w-6 h-6" />
+        </button>
       </div>
     </div>
   );

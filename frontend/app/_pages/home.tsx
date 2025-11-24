@@ -9,15 +9,15 @@ import BenefitComponent from "../components/home/BenefitComponent";
 
 const home = () => {
   return (
-    <div>
-      <SubscribeComponent className="!min-h-screen !w-full !max-w-full rounded-none test_border" />
+    <>
+      <HeroSection />
       <InfoCards />
       <PopularProduct />
       <BestSells />
       <DealsDay />
       <SubscribeComponent />
       <BenefitComponent />
-    </div>
+    </>
   );
 };
 
