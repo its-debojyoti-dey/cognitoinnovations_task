@@ -7,12 +7,13 @@ import { ProductTabs } from "../components/product/product-tabs";
 import { TabContent } from "../components/product/tab-content";
 import ProductFilter from "../components/product/product-filter";
 import { ShoppingSection } from "../components/product/shopping-section";
-import { useAppDispatch } from "../store/hooks";
-import { addToCart } from "../store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addToCart, removeFromCart } from "../store/slices/cartSlice";
 import type { Product } from "../types";
 
 export default function ProductPage() {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("50kg");
   const [activeTab, setActiveTab] = useState("description");
@@ -42,14 +43,23 @@ export default function ProductPage() {
     originalPrice: 123.25,
   };
 
-  const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        product: currentProduct,
-        quantity,
-        size: selectedSize,
-      })
-    );
+  // Check if product with this size is in cart
+  const isInCart = cartItems.some(
+    (item) => item.id === currentProduct.id && item.size === selectedSize
+  );
+
+  const handleToggleCart = () => {
+    if (isInCart) {
+      dispatch(removeFromCart({ id: currentProduct.id, size: selectedSize }));
+    } else {
+      dispatch(
+        addToCart({
+          product: currentProduct,
+          quantity,
+          size: selectedSize,
+        })
+      );
+    }
   };
 
   const products = [
@@ -114,7 +124,8 @@ export default function ProductPage() {
               quantity={quantity}
               onSizeChange={setSelectedSize}
               onQuantityChange={setQuantity}
-              onAddToCart={handleAddToCart}
+              onAddToCart={handleToggleCart}
+              isInCart={isInCart}
             />
           </div>
           {/* Tabs Section */}

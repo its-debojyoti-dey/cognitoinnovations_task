@@ -5,19 +5,28 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import useResponsive from "@/app/hooks/useResponsive";
 import { useEffect, useState, useMemo } from "react";
 import { useGetBestSellsQuery } from "@/app/store/api/productApi";
-import { useAppDispatch } from "@/app/store/hooks";
-import { addToCart } from "@/app/store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { addToCart, removeFromCart } from "@/app/store/slices/cartSlice";
 import type { Product } from "@/app/types";
+import toast from "react-hot-toast";
 
 const BestSells = () => {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
   const { isDesktop, isTablet, isMobile } = useResponsive();
   const { data, isLoading, error } = useGetBestSellsQuery();
 
   const bestSellsData = data?.data || [];
 
-  const handleAddToCart = (product: Product) => {
-    dispatch(addToCart({ product, quantity: 1 }));
+  const handleToggleCart = (product: Product) => {
+    const isInCart = cartItems.some((item) => item.id === product.id);
+    if (isInCart) {
+      dispatch(removeFromCart({ id: product.id }));
+      toast.error("Product removed from cart");
+    } else {
+      dispatch(addToCart({ product, quantity: 1 }));
+      toast.success("Product added to cart");
+    }
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -116,7 +125,7 @@ const BestSells = () => {
                   {...product}
                   pricingClass="flex-col items-start justify-start"
                   buttonClass="w-full text-center justify-center items-center"
-                  onAddClick={() => handleAddToCart(product)}
+                  onAddClick={() => handleToggleCart(product)}
                 />
               ))}
           </div>

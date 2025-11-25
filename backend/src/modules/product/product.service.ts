@@ -1,6 +1,5 @@
 import { Product, ProductResponse } from "./product.types";
 
-// Badge colors matching frontend
 const badgeColors = {
   Hot: "bg-[#F74B81]",
   Sale: "bg-[#67BCEE]",
@@ -8,7 +7,6 @@ const badgeColors = {
   Other: "bg-[#F59758]",
 };
 
-// Mock product data with isPopular and isBestSell flags
 const mockProducts: Product[] = [
   {
     id: "1",
@@ -192,17 +190,14 @@ export class ProductService {
     imageType: "popular" | "sales"
   ): ProductResponse[] {
     return products.map((product) => {
-      // Convert image path based on endpoint type
       let imagePath = product.image;
       if (
         imageType === "sales" &&
         product.image.includes("/popular_products/")
       ) {
-        // Convert popular_products path to sales path for best sells
         const imageName = product.image.split("/").pop();
         imagePath = `/sales/${imageName}`;
       } else if (imageType === "popular" && product.image.includes("/sales/")) {
-        // Convert sales path to popular_products path for popular products
         const imageName = product.image.split("/").pop();
         imagePath = `/popular_products/${imageName}`;
       }

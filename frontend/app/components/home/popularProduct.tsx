@@ -1,15 +1,16 @@
 "use client";
 import React, { useState, useMemo } from "react";
 
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, Check } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/app/utils/utils";
 import useResponsive from "@/app/hooks/useResponsive";
 import Link from "next/link";
 import { useGetPopularProductsQuery } from "@/app/store/api/productApi";
 import type { Product } from "@/app/types";
-import { useAppDispatch } from "@/app/store/hooks";
-import { addToCart } from "@/app/store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { addToCart, removeFromCart } from "@/app/store/slices/cartSlice";
+import toast from "react-hot-toast";
 
 export const badgeColors = {
   Hot: "bg-[#F74B81]",
@@ -19,12 +20,14 @@ export const badgeColors = {
 };
 
 export interface ProductCardProps extends Product {
+  id: string | number;
   pricingClass?: string;
   buttonClass?: string;
   onAddClick?: () => void;
 }
 
 export function ProductCard({
+  id,
   title,
   category,
   image,
@@ -40,6 +43,40 @@ export function ProductCard({
   pricingClass,
   buttonClass,
 }: ProductCardProps) {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  // Check if product is in cart
+  const isInCart = cartItems.some((item) => item.id === id);
+
+  const handleToggleCart = () => {
+    if (onAddClick) {
+      onAddClick();
+    } else {
+      if (isInCart) {
+        dispatch(removeFromCart({ id }));
+        toast.error("Product removed from cart");
+      } else {
+        dispatch(
+          addToCart({
+            product: {
+              id,
+              title,
+              category,
+              image,
+              imageAlt,
+              rating,
+              brand,
+              salePrice,
+              originalPrice,
+            },
+            quantity: 1,
+          })
+        );
+        toast.success("Product added to cart");
+      }
+    }
+  };
   return (
     <div className="relative bg-white rounded-3xl overflow-hidden border border-slate-200">
       {/* Hot Badge */}
@@ -105,14 +142,26 @@ export function ProductCard({
             </span>
           </div>
           <button
-            onClick={onAddClick}
+            onClick={handleToggleCart}
             className={cn(
-              "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors",
+              "font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors",
+              isInCart
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : "bg-red-500 hover:bg-red-600 text-white",
               buttonClass
             )}
           >
-            <ShoppingCart className="w-4 h-4" />
-            Add
+            {isInCart ? (
+              <>
+                <Check className="w-4 h-4" />
+                In Cart
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                Add
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -122,6 +171,7 @@ export function ProductCard({
 
 const popularProduct = () => {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
   const { isDesktop } = useResponsive();
   const [category, setCategory] = useState<string>("all");
 
@@ -147,8 +197,15 @@ const popularProduct = () => {
     );
   }, [popularProductData]);
 
-  const handleAddToCart = (product: Product) => {
-    dispatch(addToCart({ product, quantity: 1 }));
+  const handleToggleCart = (product: Product) => {
+    const isInCart = cartItems.some((item) => item.id === product.id);
+    if (isInCart) {
+      dispatch(removeFromCart({ id: product.id }));
+      toast.error("Product removed from cart");
+    } else {
+      dispatch(addToCart({ product, quantity: 1 }));
+      toast.success("Product added to cart");
+    }
   };
 
   if (isLoading) {
@@ -230,7 +287,7 @@ const popularProduct = () => {
           <ProductCard
             key={product.id}
             {...product}
-            onAddClick={() => handleAddToCart(product)}
+            onAddClick={() => handleToggleCart(product)}
           />
         ))}
       </div>

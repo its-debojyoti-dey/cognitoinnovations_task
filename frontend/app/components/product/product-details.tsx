@@ -18,6 +18,7 @@ interface ProductDetailsProps {
   onSizeChange: (size: string) => void;
   onQuantityChange: (quantity: number) => void;
   onAddToCart: () => void;
+  isInCart?: boolean;
 }
 
 export function ProductDetails({
@@ -34,6 +35,7 @@ export function ProductDetails({
   onSizeChange,
   onQuantityChange,
   onAddToCart,
+  isInCart = false,
 }: ProductDetailsProps) {
   return (
     <div className="flex flex-col justify-start">
@@ -64,6 +66,7 @@ export function ProductDetails({
         quantity={quantity}
         onQuantityChange={onQuantityChange}
         onAddToCart={onAddToCart}
+        isInCart={isInCart}
       />
     </div>
   );

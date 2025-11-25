@@ -1,18 +1,20 @@
 "use client";
 
-import { Plus, Minus } from "lucide-react";
-import Link from "next/link";
+import { Plus, Minus, Check } from "lucide-react";
+import { cn } from "@/app/utils/utils";
 
 interface QuantitySelectorProps {
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   onAddToCart: () => void;
+  isInCart?: boolean;
 }
 
 export function QuantitySelector({
   quantity,
   onQuantityChange,
   onAddToCart,
+  isInCart = false,
 }: QuantitySelectorProps) {
   return (
     <div className="flex items-center gap-4">
@@ -38,9 +40,21 @@ export function QuantitySelector({
       </div>
       <button
         onClick={onAddToCart}
-        className="bg-red-500 text-white xl:px-8 px-4 xl:py-2 py-1 text-sm xl:text-lg rounded-md font-semibold hover:bg-red-600 transition-colors"
+        className={cn(
+          "xl:px-8 px-4 xl:py-2 py-1 text-sm xl:text-lg rounded-md font-semibold transition-colors flex items-center gap-2",
+          isInCart
+            ? "bg-green-500 hover:bg-green-600 text-white"
+            : "bg-red-500 hover:bg-red-600 text-white"
+        )}
       >
-        Add To Cart
+        {isInCart ? (
+          <>
+            <Check className="w-4 h-4 xl:w-5 xl:h-5" />
+            In Cart
+          </>
+        ) : (
+          "Add To Cart"
+        )}
       </button>
     </div>
   );

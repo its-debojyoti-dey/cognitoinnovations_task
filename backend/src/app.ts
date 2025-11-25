@@ -1,17 +1,14 @@
 import express from "express";
+import cors from "cors";
 import { config } from "./config";
 import { errorHandler } from "./common/middleware/errorHandler.middleware";
 import { notFound } from "./common/middleware/notFound.middleware";
-// import { userRoutes } from "./modules/user/user.route";
-// import { authRoutes } from "./modules/auth/auth.route";
-import cors from "cors";
 import { productRoutes } from "./modules/product/product.route";
 import { newsletterRoutes } from "./modules/newsletter/newsletter.route";
 import { orderRoutes } from "./modules/order/order.route";
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -21,8 +18,6 @@ app.get("/health", (req, res) => {
 });
 
 // API Routes
-// app.use(`/api/${config.apiVersion}/users`, userRoutes);
-// app.use(`/api/${config.apiVersion}/auth`, authRoutes);
 app.use(`/api/${config.apiVersion}/products`, productRoutes);
 app.use(`/api/${config.apiVersion}/newsletter`, newsletterRoutes);
 app.use(`/api/${config.apiVersion}/orders`, orderRoutes);

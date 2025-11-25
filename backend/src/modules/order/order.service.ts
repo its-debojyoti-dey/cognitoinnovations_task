@@ -31,7 +31,7 @@ export class OrderService {
     const now = new Date().toISOString();
 
     const orderResponse: OrderResponse = {
-      id: Date.now(), // In a real app, this would come from database
+      id: Date.now(),
       orderNumber,
       status: "pending",
       total: request.total,
@@ -55,6 +55,8 @@ export class OrderService {
           billingDetails: request.billingDetails,
           paymentMethod: request.paymentMethod,
         });
+
+        console.log("Order confirmation email sent successfully");
       } catch (error) {
         console.error("Error sending order confirmation email:", error);
         // Don't fail the order if email fails, just log the error

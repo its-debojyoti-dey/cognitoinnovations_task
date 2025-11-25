@@ -1,12 +1,11 @@
 import nodemailer from "nodemailer";
 import { config } from "../../config";
 
-// Create reusable transporter
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: config.email.host,
     port: config.email.port,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
       user: config.email.user,
       pass: config.email.pass,
@@ -21,9 +20,6 @@ interface EmailOptions {
   text?: string;
 }
 
-/**
- * Generic email sending function
- */
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
   try {
     const transporter = createTransporter();
@@ -43,9 +39,6 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
   }
 };
 
-/**
- * Send newsletter subscription confirmation email
- */
 export const sendNewsletterConfirmation = async (
   email: string
 ): Promise<void> => {
@@ -88,9 +81,6 @@ export const sendNewsletterConfirmation = async (
   });
 };
 
-/**
- * Send order confirmation email with order details
- */
 export const sendOrderConfirmation = async (
   email: string,
   orderDetails: {

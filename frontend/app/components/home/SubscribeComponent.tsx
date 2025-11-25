@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { cn } from "@/app/utils/utils";
 import { useSubscribeNewsletterMutation } from "@/app/store/api/newsletterApi";
+import toast from "react-hot-toast";
 
 const SubscribeComponent = ({ className }: { className?: string }) => {
   const [email, setEmail] = useState("");
@@ -12,14 +13,19 @@ const SubscribeComponent = ({ className }: { className?: string }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
+      toast.error("Please enter your email address");
       return;
     }
 
     try {
       await subscribeNewsletter({ email: email.trim() }).unwrap();
       setEmail("");
+      toast.success(
+        "Successfully subscribed! Check your email for confirmation."
+      );
     } catch (error) {
       console.error("Failed to subscribe:", error);
+      toast.error("Failed to subscribe. Please try again.");
     }
   };
 

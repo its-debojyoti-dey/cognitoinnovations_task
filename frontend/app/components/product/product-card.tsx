@@ -1,9 +1,11 @@
 "use client";
 
-import { ShoppingCart } from "lucide-react";
-import { useAppDispatch } from "@/app/store/hooks";
-import { addToCart } from "@/app/store/slices/cartSlice";
+import { ShoppingCart, Check } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { addToCart, removeFromCart } from "@/app/store/slices/cartSlice";
+import { cn } from "@/app/utils/utils";
 import type { Product } from "@/app/types";
+import toast from "react-hot-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -15,12 +17,24 @@ export default function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
 
-  const handleAddToCart = () => {
+  // Check if product is in cart (considering size if applicable)
+  const isInCart = cartItems.some((item) => item.id === product.id);
+
+  const handleToggleCart = () => {
     if (onAddToCart) {
       onAddToCart();
     } else {
-      dispatch(addToCart({ product, quantity: 1 }));
+      if (isInCart) {
+        // Find the cart item to get its size
+        const cartItem = cartItems.find((item) => item.id === product.id);
+        dispatch(removeFromCart({ id: product.id, size: cartItem?.size }));
+        toast.error("Product removed from cart");
+      } else {
+        dispatch(addToCart({ product, quantity: 1 }));
+        toast.success("Product added to cart");
+      }
     }
   };
   return (
@@ -72,11 +86,25 @@ export default function ProductCard({
             </span>
           </div>
           <button
-            onClick={handleAddToCart}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors w-full justify-center"
+            onClick={handleToggleCart}
+            className={cn(
+              "font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors w-full justify-center",
+              isInCart
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : "bg-red-500 hover:bg-red-600 text-white"
+            )}
           >
-            <ShoppingCart className="w-4 h-4" />
-            Add to Cart
+            {isInCart ? (
+              <>
+                <Check className="w-4 h-4" />
+                In Cart
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                Add to Cart
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const toNumber = (value: string | undefined, fallback: number): number => {
   const parsed = Number(value);
   return Number.isNaN(parsed) ? fallback : parsed;

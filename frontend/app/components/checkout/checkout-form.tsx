@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { clearCart } from "@/app/store/slices/cartSlice";
 import { createOrderRequest } from "@/app/store/utils/orderUtils";
 import type { BillingDetails } from "@/app/types";
+import toast from "react-hot-toast";
 
 export function CheckoutForm() {
   const dispatch = useAppDispatch();
@@ -54,13 +55,15 @@ export function CheckoutForm() {
       !formData.city ||
       !formData.country
     ) {
-      alert("Please fill in all required fields");
+      // alert("Please fill in all required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
 
     // Check if cart is empty
     if (cartItems.length === 0) {
-      alert("Your cart is empty");
+      // alert("Your cart is empty");
+      toast.error("Your cart is empty");
       return;
     }
 
@@ -92,22 +95,26 @@ export function CheckoutForm() {
 
       if (result.success) {
         // Clear cart after successful order
-        dispatch(clearCart());
+        // dispatch(clearCart());
+        toast.success(
+          "Order placed successfully! Check your email for confirmation."
+        );
         // Reset form
-        setFormData({
-          email: "",
-          otp: "",
-          firstName: "",
-          lastName: "",
-          address: "",
-          city: "",
-          postCode: "",
-          country: "",
-          region: "",
-        });
+        // setFormData({
+        //   email: "",
+        //   otp: "",
+        //   firstName: "",
+        //   lastName: "",
+        //   address: "",
+        //   city: "",
+        //   postCode: "",
+        //   country: "",
+        //   region: "",
+        // });
       }
     } catch (err) {
       console.error("Failed to place order:", err);
+      toast.error("Failed to place order. Please try again.");
     }
   };
 
@@ -272,7 +279,11 @@ export function CheckoutForm() {
             )}
           </div>
         )}
-        <Button type="submit" disabled={isLoading || cartItems.length === 0}>
+        <Button
+          type="submit"
+          disabled={isLoading || cartItems.length === 0}
+          className="cursor-pointer"
+        >
           {isLoading ? "Placing Order..." : "Place Order"}
         </Button>
       </div>
