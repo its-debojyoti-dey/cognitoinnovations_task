@@ -5,9 +5,6 @@ import {
   BillingDetails,
 } from "../../types";
 
-/**
- * Transform cart items to order items format
- */
 export const transformCartItemsToOrderItems = (
   cartItems: CartItem[]
 ): OrderItem[] => {
@@ -20,9 +17,6 @@ export const transformCartItemsToOrderItems = (
   }));
 };
 
-/**
- * Create order request from cart and billing details
- */
 export const createOrderRequest = (
   cartItems: CartItem[],
   billingDetails: BillingDetails,

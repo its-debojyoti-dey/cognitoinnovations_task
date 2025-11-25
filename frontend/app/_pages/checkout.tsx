@@ -19,17 +19,14 @@ export default function CheckoutPageComponent() {
   const [deliveryMethod, setDeliveryMethod] = useState("free");
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
-  // Calculate delivery charges based on selected method
   const deliveryCharges = useMemo(() => {
     return deliveryMethod === "free" ? 0 : 5;
   }, [deliveryMethod]);
 
-  // Calculate final total
   const finalTotal = useMemo(() => {
     return cartTotal + deliveryCharges;
   }, [cartTotal, deliveryCharges]);
 
-  // Format cart items for display
   const formattedProducts = useMemo(() => {
     return cartItems.map((item) => ({
       id: item.id,
@@ -95,7 +92,6 @@ export default function CheckoutPageComponent() {
     <main className="min-h-screen sm:max-w-7xl w-full mx-auto py-8 sm:px-4 px-2">
       <div className="sm:flex grid sm:grid-cols-2 gap-4 ">
         <div className="sm:max-w-[30%] w-full space-y-4">
-          {/* Order Summary Card */}
           <Card>
             <SectionHeader title="Summary" />
             <OrderSummary
@@ -107,7 +103,6 @@ export default function CheckoutPageComponent() {
             />
           </Card>
 
-          {/* Delivery Method Card */}
           <Card>
             <SectionHeader
               title="Delivery Method"
@@ -130,7 +125,6 @@ export default function CheckoutPageComponent() {
             </div>
           </Card>
 
-          {/* Payment Method Card */}
           <Card>
             <SectionHeader
               title="Payment Method"
@@ -143,7 +137,6 @@ export default function CheckoutPageComponent() {
             />
           </Card>
 
-          {/* Payment Gateways Card */}
           <Card>
             <SectionHeader title="Payment Method" />
             <PaymentGateways gateways={paymentGateways} />

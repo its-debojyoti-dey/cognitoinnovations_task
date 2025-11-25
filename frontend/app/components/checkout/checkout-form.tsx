@@ -60,7 +60,6 @@ export function CheckoutForm() {
       return;
     }
 
-    // Check if cart is empty
     if (cartItems.length === 0) {
       // alert("Your cart is empty");
       toast.error("Your cart is empty");
@@ -85,7 +84,7 @@ export function CheckoutForm() {
         cartItems,
         billingDetails,
         cartTotal,
-        "cash", // Default payment method
+        "cash",
         formData.email || undefined,
         formData.otp || undefined
       );
@@ -94,23 +93,21 @@ export function CheckoutForm() {
       const result = await placeOrder(orderRequest).unwrap();
 
       if (result.success) {
-        // Clear cart after successful order
-        // dispatch(clearCart());
+        dispatch(clearCart());
         toast.success(
           "Order placed successfully! Check your email for confirmation."
         );
-        // Reset form
-        // setFormData({
-        //   email: "",
-        //   otp: "",
-        //   firstName: "",
-        //   lastName: "",
-        //   address: "",
-        //   city: "",
-        //   postCode: "",
-        //   country: "",
-        //   region: "",
-        // });
+        setFormData({
+          email: "",
+          otp: "",
+          firstName: "",
+          lastName: "",
+          address: "",
+          city: "",
+          postCode: "",
+          country: "",
+          region: "",
+        });
       }
     } catch (err) {
       console.error("Failed to place order:", err);
@@ -138,7 +135,6 @@ export function CheckoutForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-8 bg-background">
-      {/* Customer Section */}
       <FormSection title="Customer">
         <div className="space-y-6">
           <div>
@@ -147,7 +143,6 @@ export function CheckoutForm() {
             </h3>
           </div>
 
-          {/* Returning Customer */}
           <div className="border-t border-gray-200 border-t-1 pt-6">
             <h3 className="text-xl font-bold text-foreground mb-6">
               Returning Customer
@@ -180,7 +175,6 @@ export function CheckoutForm() {
         </div>
       </FormSection>
 
-      {/* Billing Details Section */}
       <FormSection title="Billing Details">
         <div className="space-y-6">
           <div>

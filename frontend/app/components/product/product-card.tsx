@@ -19,7 +19,6 @@ export default function ProductCard({
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
 
-  // Check if product is in cart (considering size if applicable)
   const isInCart = cartItems.some((item) => item.id === product.id);
 
   const handleToggleCart = () => {
@@ -27,7 +26,6 @@ export default function ProductCard({
       onAddToCart();
     } else {
       if (isInCart) {
-        // Find the cart item to get its size
         const cartItem = cartItems.find((item) => item.id === product.id);
         dispatch(removeFromCart({ id: product.id, size: cartItem?.size }));
         toast.error("Product removed from cart");
@@ -39,7 +37,6 @@ export default function ProductCard({
   };
   return (
     <div className="flex flex-col bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-      {/* Product Image Container */}
       <div className="relative bg-[#f7f7fa] h-72 flex items-center justify-center group lg:m-3 rounded-lg">
         <img
           src={product.image || "/placeholder.svg"}
@@ -49,14 +46,11 @@ export default function ProductCard({
         <div className="h-10 w-10 bg-gray-100 border border-gray-300 rounded-full absolute -bottom-5 left-[45%]"></div>
       </div>
 
-      {/* Product Info */}
       <div className="flex-1 p-6 flex flex-col">
-        {/* Category */}
         <p className="text-xs text-gray-500 font-medium mb-3 uppercase tracking-wider text-center">
           {product.category}
         </p>
 
-        {/* Rating Stars - added star rating display */}
         <div className="flex gap-1 mb-4 justify-center">
           {[...Array(5)].map((_, i) => (
             <svg
@@ -70,12 +64,10 @@ export default function ProductCard({
           ))}
         </div>
 
-        {/* Title */}
         <h3 className="text-sm font-semibold text-gray-900 mb-4 line-clamp-2 leading-tight text-center">
           {product.title}
         </h3>
 
-        {/* Pricing - updated price display styling to match design */}
         <div className="flex flex-col items-center gap-3 mt-auto">
           <div className="flex items-baseline gap-2 justify-center">
             <span className="text-lg font-bold text-red-500">

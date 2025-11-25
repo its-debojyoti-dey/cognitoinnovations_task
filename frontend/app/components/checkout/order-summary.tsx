@@ -29,7 +29,6 @@ export function OrderSummary({
 }: OrderSummaryProps) {
   return (
     <div className="space-y-4 sm:space-y-6 overflow-hidden">
-      {/* Summary Items */}
       <div className="space-y-4">
         {items.map((item, idx) => (
           <div key={idx} className="flex justify-between items-center">
@@ -43,7 +42,6 @@ export function OrderSummary({
 
       <div className="border-t border-gray-200"></div>
 
-      {/* Total Amount - More Prominent */}
       <div className="flex justify-between items-center pt-2">
         <span className="text-lg sm:text-xl font-bold text-gray-900">
           {totalLabel}

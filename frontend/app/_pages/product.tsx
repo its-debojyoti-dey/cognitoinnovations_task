@@ -30,7 +30,6 @@ export default function ProductPage() {
     { label: "Items", value: "1" },
   ];
 
-  // Mock product data - in a real app, this would come from API/params
   const currentProduct: Product = {
     id: "1",
     title: "Seeds Of Change Orqagnic Quinoa, Brown",
@@ -43,7 +42,6 @@ export default function ProductPage() {
     originalPrice: 123.25,
   };
 
-  // Check if product with this size is in cart
   const isInCart = cartItems.some(
     (item) => item.id === currentProduct.id && item.size === selectedSize
   );
@@ -103,7 +101,6 @@ export default function ProductPage() {
         <div className="h-full min-w-[100%] lg:min-w-[25%] mb-12 lg:mb-0 xl:block hidden">
           <ProductFilter />
         </div>
-        {/* Product Section */}
         <div className="mx-auto lg:px-4 px-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 px-3">
             <ProductImage
