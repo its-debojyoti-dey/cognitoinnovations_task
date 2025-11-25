@@ -11,6 +11,12 @@ interface OrderSummaryProps {
   totalLabel?: string;
   totalValue?: string;
   products: any[];
+  onRemoveItem?: (id: string | number, size?: string) => void;
+  onUpdateQuantity?: (
+    id: string | number,
+    quantity: number,
+    size?: string
+  ) => void;
 }
 
 export function OrderSummary({
@@ -18,6 +24,8 @@ export function OrderSummary({
   totalLabel = "Total Amount",
   totalValue = "$0.00",
   products,
+  onRemoveItem,
+  onUpdateQuantity,
 }: OrderSummaryProps) {
   return (
     <div className="space-y-4 sm:space-y-6 overflow-hidden">
@@ -48,12 +56,17 @@ export function OrderSummary({
       <div className="space-y-2 gap-2">
         {products.map((product) => (
           <ProductItem
-            key={product.title}
+            key={`${product.id}-${product.size || ""}`}
+            id={product.id}
             image={product.image}
             title={product.title}
             rating={product.rating}
             price={product.price}
             originalPrice={product.originalPrice}
+            quantity={product.quantity}
+            size={product.size}
+            onRemove={onRemoveItem}
+            onUpdateQuantity={onUpdateQuantity}
           />
         ))}
       </div>

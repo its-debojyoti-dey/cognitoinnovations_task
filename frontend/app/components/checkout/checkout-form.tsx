@@ -7,8 +7,20 @@ import { InputField } from "./input-field";
 import { SelectField } from "./select-field";
 import { Button } from "./button";
 import { FormSection } from "./form-section";
+import { usePlaceOrderMutation } from "@/app/store/api/orderApi";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { clearCart } from "@/app/store/slices/cartSlice";
+import { createOrderRequest } from "@/app/store/utils/orderUtils";
+import type { BillingDetails } from "@/app/types";
 
 export function CheckoutForm() {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const cartTotal = useAppSelector((state) => state.cart.total);
+
+  const [placeOrder, { isLoading, isSuccess, isError, error }] =
+    usePlaceOrderMutation();
+
   const [formData, setFormData] = useState({
     email: "",
     otp: "",
@@ -32,9 +44,71 @@ export function CheckoutForm() {
     console.log("Verify clicked:", formData.email, formData.otp);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    // Validate required fields
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.city ||
+      !formData.country
+    ) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    // Check if cart is empty
+    if (cartItems.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
+
+    try {
+      // Prepare billing details
+      const billingDetails: BillingDetails = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email || undefined,
+        address: formData.address || undefined,
+        city: formData.city,
+        postCode: formData.postCode || undefined,
+        country: formData.country,
+        region: formData.region || undefined,
+      };
+
+      // Create order request
+      const orderRequest = createOrderRequest(
+        cartItems,
+        billingDetails,
+        cartTotal,
+        "cash", // Default payment method
+        formData.email || undefined,
+        formData.otp || undefined
+      );
+
+      // Place order
+      const result = await placeOrder(orderRequest).unwrap();
+
+      if (result.success) {
+        // Clear cart after successful order
+        dispatch(clearCart());
+        // Reset form
+        setFormData({
+          email: "",
+          otp: "",
+          firstName: "",
+          lastName: "",
+          address: "",
+          city: "",
+          postCode: "",
+          country: "",
+          region: "",
+        });
+      }
+    } catch (err) {
+      console.error("Failed to place order:", err);
+    }
   };
 
   const cityOptions = [
@@ -178,8 +252,29 @@ export function CheckoutForm() {
       </FormSection>
 
       {/* Submit Button */}
-      <div className="flex justify-end ">
-        <Button type="submit">Place Order</Button>
+      <div className="flex flex-col items-end gap-4">
+        {isSuccess && (
+          <div className="w-full p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-green-800 font-medium">
+              Order placed successfully! Check your email for confirmation.
+            </p>
+          </div>
+        )}
+        {isError && (
+          <div className="w-full p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 font-medium">
+              Failed to place order. Please try again.
+            </p>
+            {error && "data" in error && (
+              <p className="text-red-600 text-sm mt-1">
+                {JSON.stringify(error.data)}
+              </p>
+            )}
+          </div>
+        )}
+        <Button type="submit" disabled={isLoading || cartItems.length === 0}>
+          {isLoading ? "Placing Order..." : "Place Order"}
+        </Button>
       </div>
     </form>
   );

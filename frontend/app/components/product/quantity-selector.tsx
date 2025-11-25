@@ -36,12 +36,12 @@ export function QuantitySelector({
           <Plus size={18} />
         </button>
       </div>
-      <Link
-        href="/checkout"
+      <button
+        onClick={onAddToCart}
         className="bg-red-500 text-white xl:px-8 px-4 xl:py-2 py-1 text-sm xl:text-lg rounded-md font-semibold hover:bg-red-600 transition-colors"
       >
         Add To Cart
-      </Link>
+      </button>
     </div>
   );
 }

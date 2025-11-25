@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card } from "../components/checkout/card";
 import { OrderSummary } from "../components/checkout/order-summary";
 import { ProductItem } from "../components/checkout/product-item";
@@ -9,32 +9,63 @@ import { RadioButton } from "../components/checkout/radio-button";
 import { PaymentMethods } from "../components/checkout/payment-methods";
 import { PaymentGateways } from "../components/checkout/payment-gateways";
 import { CheckoutForm } from "../components/checkout/checkout-form";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { removeFromCart, updateQuantity } from "../store/slices/cartSlice";
 
 export default function CheckoutPageComponent() {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const cartTotal = useAppSelector((state) => state.cart.total);
   const [deliveryMethod, setDeliveryMethod] = useState("free");
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
-  const summaryItems = [
-    { label: "Sub-Total", value: "$80.00" },
-    { label: "Delivery Charges", value: "$80.00" },
-  ];
+  // Calculate delivery charges based on selected method
+  const deliveryCharges = useMemo(() => {
+    return deliveryMethod === "free" ? 0 : 5;
+  }, [deliveryMethod]);
 
-  const products = [
-    {
-      image: "/checkout/1.png",
-      title: "Dates Value Pack Pouch",
-      rating: 4.5,
-      price: "$120.25",
-      originalPrice: "$123.25",
-    },
-    {
-      image: "/checkout/2.png",
-      title: "Smoked Honey Spiced Nuts",
-      rating: 4.5,
-      price: "$120.25",
-      originalPrice: "$123.25",
-    },
-  ];
+  // Calculate final total
+  const finalTotal = useMemo(() => {
+    return cartTotal + deliveryCharges;
+  }, [cartTotal, deliveryCharges]);
+
+  // Format cart items for display
+  const formattedProducts = useMemo(() => {
+    return cartItems.map((item) => ({
+      id: item.id,
+      image: item.product.image || "/placeholder.svg",
+      title: item.product.title,
+      rating: item.product.rating || 4.5,
+      price: `$${(item.price * item.quantity).toFixed(2)}`,
+      originalPrice: `$${(item.product.originalPrice * item.quantity).toFixed(
+        2
+      )}`,
+      quantity: item.quantity,
+      size: item.size,
+    }));
+  }, [cartItems]);
+
+  const summaryItems = useMemo(() => {
+    return [
+      { label: "Sub-Total", value: `$${cartTotal.toFixed(2)}` },
+      {
+        label: "Delivery Charges",
+        value: deliveryCharges > 0 ? `$${deliveryCharges.toFixed(2)}` : "Free",
+      },
+    ];
+  }, [cartTotal, deliveryCharges]);
+
+  const handleRemoveItem = (id: string | number, size?: string) => {
+    dispatch(removeFromCart({ id, size }));
+  };
+
+  const handleUpdateQuantity = (
+    id: string | number,
+    quantity: number,
+    size?: string
+  ) => {
+    dispatch(updateQuantity({ id, quantity, size }));
+  };
 
   const deliveryMethods = [
     { id: "free", label: "Free Shipping", rate: 0 },
@@ -69,8 +100,10 @@ export default function CheckoutPageComponent() {
             <SectionHeader title="Summary" />
             <OrderSummary
               items={summaryItems}
-              totalValue="$80.00"
-              products={products}
+              totalValue={`$${finalTotal.toFixed(2)}`}
+              products={formattedProducts}
+              onRemoveItem={handleRemoveItem}
+              onUpdateQuantity={handleUpdateQuantity}
             />
           </Card>
 
@@ -118,7 +151,21 @@ export default function CheckoutPageComponent() {
         </div>
 
         <div className="sm:max-w-[70%] w-full space-y-4">
-          <CheckoutForm />
+          {cartItems.length === 0 ? (
+            <Card>
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
+                <a
+                  href="/"
+                  className="text-red-500 hover:text-red-600 font-semibold"
+                >
+                  Continue Shopping
+                </a>
+              </div>
+            </Card>
+          ) : (
+            <CheckoutForm />
+          )}
         </div>
       </div>
     </main>

@@ -1,19 +1,28 @@
 "use client";
 
-interface Product {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  originalPrice: number;
-  salePrice: number;
-}
+import { ShoppingCart } from "lucide-react";
+import { useAppDispatch } from "@/app/store/hooks";
+import { addToCart } from "@/app/store/slices/cartSlice";
+import type { Product } from "@/app/types";
 
 interface ProductCardProps {
   product: Product;
+  onAddToCart?: () => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  onAddToCart,
+}: ProductCardProps) {
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    if (onAddToCart) {
+      onAddToCart();
+    } else {
+      dispatch(addToCart({ product, quantity: 1 }));
+    }
+  };
   return (
     <div className="flex flex-col bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
       {/* Product Image Container */}
@@ -53,13 +62,22 @@ export default function ProductCard({ product }: ProductCardProps) {
         </h3>
 
         {/* Pricing - updated price display styling to match design */}
-        <div className="flex items-baseline gap-2 mt-auto justify-center">
-          <span className="text-lg font-bold text-red-500">
-            ${product.salePrice.toFixed(2)}
-          </span>
-          <span className="text-sm text-gray-400 line-through">
-            ${product.originalPrice.toFixed(2)}
-          </span>
+        <div className="flex flex-col items-center gap-3 mt-auto">
+          <div className="flex items-baseline gap-2 justify-center">
+            <span className="text-lg font-bold text-red-500">
+              ${product.salePrice.toFixed(2)}
+            </span>
+            <span className="text-sm text-gray-400 line-through">
+              ${product.originalPrice.toFixed(2)}
+            </span>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors w-full justify-center"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

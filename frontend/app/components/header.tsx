@@ -16,6 +16,7 @@ import { MobileSidebar } from "./Header/mobile-sidebar";
 import { useState } from "react";
 import useResponsive from "../hooks/useResponsive";
 import { cn } from "../utils/utils";
+import { useAppSelector } from "../store/hooks";
 
 const navItems = [
   {
@@ -116,6 +117,7 @@ const SubMenuItems = [
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isDesktop } = useResponsive();
+  const cartItemCount = useAppSelector((state) => state.cart.itemCount);
   return (
     <>
       {/* <header className="bg-white w-full ">
@@ -254,9 +256,14 @@ const Header = () => {
                 <Link
                   href={item.href}
                   key={index}
-                  className="flex items-center justify-center gap-1 md:gap-2 text-sm md:text-base"
+                  className="flex items-center justify-center gap-1 md:gap-2 text-sm md:text-base relative"
                 >
                   {item.icon}
+                  {item.label === "Cart" && cartItemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {cartItemCount > 99 ? "99+" : cartItemCount}
+                    </span>
+                  )}
                   {isDesktop && (
                     <span className="hidden md:inline">{item.label}</span>
                   )}

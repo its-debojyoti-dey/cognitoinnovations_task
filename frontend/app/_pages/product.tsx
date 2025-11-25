@@ -7,8 +7,12 @@ import { ProductTabs } from "../components/product/product-tabs";
 import { TabContent } from "../components/product/tab-content";
 import ProductFilter from "../components/product/product-filter";
 import { ShoppingSection } from "../components/product/shopping-section";
+import { useAppDispatch } from "../store/hooks";
+import { addToCart } from "../store/slices/cartSlice";
+import type { Product } from "../types";
 
 export default function ProductPage() {
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("50kg");
   const [activeTab, setActiveTab] = useState("description");
@@ -25,8 +29,27 @@ export default function ProductPage() {
     { label: "Items", value: "1" },
   ];
 
+  // Mock product data - in a real app, this would come from API/params
+  const currentProduct: Product = {
+    id: "1",
+    title: "Seeds Of Change Orqagnic Quinoa, Brown",
+    category: "Organic",
+    image: "/product.png",
+    imageAlt: "Seeds Of Change Orqagnic Quinoa, Brown",
+    rating: 5,
+    brand: "NestFood",
+    salePrice: 120.25,
+    originalPrice: 123.25,
+  };
+
   const handleAddToCart = () => {
-    console.log(`Added ${quantity} items of size ${selectedSize} to cart`);
+    dispatch(
+      addToCart({
+        product: currentProduct,
+        quantity,
+        size: selectedSize,
+      })
+    );
   };
 
   const products = [

@@ -1,6 +1,28 @@
+"use client";
+
+import React, { useState } from "react";
 import { cn } from "@/app/utils/utils";
+import { useSubscribeNewsletterMutation } from "@/app/store/api/newsletterApi";
 
 const SubscribeComponent = ({ className }: { className?: string }) => {
+  const [email, setEmail] = useState("");
+  const [subscribeNewsletter, { isLoading, isSuccess, isError }] =
+    useSubscribeNewsletterMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      return;
+    }
+
+    try {
+      await subscribeNewsletter({ email: email.trim() }).unwrap();
+      setEmail("");
+    } catch (error) {
+      console.error("Failed to subscribe:", error);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -18,16 +40,37 @@ const SubscribeComponent = ({ className }: { className?: string }) => {
           Start You'r Daily Shopping with{" "}
           <span className="text-green-500">Nest Mart</span>
         </p>
-        <div className="flex items-center sm:gap-2 sm:w-[90%] md:w-[70%] w-full relative">
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-center sm:gap-2 sm:w-[90%] md:w-[70%] w-full relative"
+        >
           <input
             type="email"
             placeholder="Your Email Address"
-            className="w-full p-2 rounded-full flex-1 bg-white placeholder:text-gray-500 p-3 sm:px-5 px-2 sm:text-sm text-xs"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+            className="w-full p-2 rounded-full flex-1 bg-white placeholder:text-gray-500 p-3 sm:px-5 px-2 sm:text-sm text-xs disabled:opacity-50"
+            required
           />
-          <button className="bg-red-500 text-white rounded-full absolute right-0 p-3 sm:px-5 px-2 sm:text-sm text-xs">
-            Subscribe
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="bg-red-500 text-white rounded-full absolute right-0 p-3 sm:px-5 px-2 sm:text-sm text-xs disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-600 transition-colors"
+          >
+            {isLoading ? "Subscribing..." : "Subscribe"}
           </button>
-        </div>
+        </form>
+        {isSuccess && (
+          <p className="text-sm text-green-600 font-medium">
+            Successfully subscribed! Check your email for confirmation.
+          </p>
+        )}
+        {isError && (
+          <p className="text-sm text-red-600 font-medium">
+            Failed to subscribe. Please try again.
+          </p>
+        )}
       </div>
       <div className="flex flex-col items-end justify-end ">
         <div className="relative h-[70%]">

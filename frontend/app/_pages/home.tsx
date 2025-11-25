@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import HeroSection from "../components/home/heroSection";
 import InfoCards from "../components/home/infoCards";

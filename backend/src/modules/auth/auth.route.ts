@@ -1,14 +1,14 @@
-import { Router } from "express";
-import { authController } from "./auth.controller";
+// import { Router } from "express";
+// import { authController } from "./auth.controller";
 
-const router = Router();
+// const router = Router();
 
-router.post("/register", (req, res, next) =>
-  authController.register(req, res, next)
-);
-router.post("/login", (req, res, next) => authController.login(req, res, next));
-router.post("/validate", (req, res, next) =>
-  authController.validateToken(req, res, next)
-);
+// router.post("/register", (req, res, next) =>
+//   authController.register(req, res, next)
+// );
+// router.post("/login", (req, res, next) => authController.login(req, res, next));
+// router.post("/validate", (req, res, next) =>
+//   authController.validateToken(req, res, next)
+// );
 
-export const authRoutes = router;
+// export const authRoutes = router;
