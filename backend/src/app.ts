@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import { config } from "./config";
 import { errorHandler } from "./common/middleware/errorHandler.middleware";
@@ -7,7 +7,7 @@ import { productRoutes } from "./modules/product/product.route";
 import { newsletterRoutes } from "./modules/newsletter/newsletter.route";
 import { orderRoutes } from "./modules/order/order.route";
 
-const app = express();
+const app: Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
