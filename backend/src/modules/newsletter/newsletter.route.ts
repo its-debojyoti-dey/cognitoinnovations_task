@@ -7,4 +7,4 @@ router.post("/subscribe", (req, res, next) =>
   newsletterController.subscribe(req, res, next)
 );
 
-export const newsletterRoutes = router;
+export const newsletterRoutes: Router = router;

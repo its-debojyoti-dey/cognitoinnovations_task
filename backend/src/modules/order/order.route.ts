@@ -7,4 +7,4 @@ router.post("/", (req, res, next) =>
   orderController.placeOrder(req, res, next)
 );
 
-export const orderRoutes = router;
+export const orderRoutes: Router = router;

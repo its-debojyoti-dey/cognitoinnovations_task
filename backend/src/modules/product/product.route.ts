@@ -10,4 +10,4 @@ router.get("/best-sells", (req, res, next) =>
   productController.getBestSells(req, res, next)
 );
 
-export const productRoutes = router;
+export const productRoutes: Router = router;
