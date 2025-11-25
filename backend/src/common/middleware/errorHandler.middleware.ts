@@ -1,17 +1,15 @@
-import { Request, Response, NextFunction } from 'express';
-import { sendError } from '../utils/response.util';
-import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/index.constants';
-
-export interface AppError extends Error {
-  statusCode?: number;
-  isOperational?: boolean;
-}
+import { Request, Response, NextFunction } from "express";
+import { sendError } from "../utils/response.util";
+import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/index.constants";
 
 export class AppError extends Error {
   statusCode: number;
   isOperational: boolean;
 
-  constructor(message: string, statusCode: number = HTTP_STATUS.INTERNAL_SERVER_ERROR) {
+  constructor(
+    message: string,
+    statusCode: number = HTTP_STATUS.INTERNAL_SERVER_ERROR
+  ) {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = true;
@@ -29,8 +27,8 @@ export const errorHandler = (
   const message = err.message || ERROR_MESSAGES.INTERNAL_ERROR;
 
   // Log error in development
-  if (process.env.NODE_ENV === 'development') {
-    console.error('Error:', {
+  if (process.env.NODE_ENV === "development") {
+    console.error("Error:", {
       message: err.message,
       stack: err.stack,
       statusCode,
@@ -39,4 +37,3 @@ export const errorHandler = (
 
   return sendError(res, message, statusCode);
 };
-
